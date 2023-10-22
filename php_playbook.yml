@@ -1,0 +1,22 @@
+---
+- name: Execute Bash script on the Slave node
+  hosts: your_group  # Replace with the correct group name from your inventory
+  tasks:
+    - name: Execute the Bash script on the Slave node
+      command: /bin/bash /tmp/script.sh
+      register: script_output
+
+    - name: Ensure the PHP application is accessible
+      wait_for:
+        host: 192.168.56.6  # Replace with the actual IP address of your VM
+        port: 80  # Adjust the port if your PHP application runs on a different port
+        state: started
+
+- name: Take a screenshot as evidence
+  hosts: localhost
+  tasks:
+    - name: Take a screenshot
+      command: gnome-screenshot --file=/pictures
+      delegate_to: 192.168.56.6  # Replace with the actual IP address of your VM
+
+
